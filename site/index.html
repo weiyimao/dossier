@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer-when-downgrade">
 <title>微信聊天记录 · 违规事项整理（证据汇编）</title>
 <style>
 /* 《违规证据汇编》样式 —— 单文件网页，全部内联，无外部依赖 */
@@ -186,9 +187,9 @@ body.egg-open{overflow:hidden}
 <div id="egg" class="egg" hidden>
   <div class="egg-inner">
     <div class="egg-big">宋叔叔大帅比</div>
-    <div class="egg-sub">—— 第 <b id="egg-n">1</b> / 10 次访问 ——</div>
+    <div class="egg-sub">—— 全站累计第 <b id="egg-n">1</b> / 10 次访问 ——</div>
     <button id="egg-go" class="egg-go" type="button">进入证据汇编 →</button>
-    <div class="egg-tip">本开屏仅在单个浏览器前 10 次访问时出现，之后自动进入正题</div>
+    <div class="egg-tip">各地访问共同累计；全站满 10 次后本开屏自动结束</div>
   </div>
 </div>
 
@@ -2910,16 +2911,17 @@ body.egg-open{overflow:hidden}
   }
 })();
 
-/* 访问彩蛋：单个浏览器前 10 次访问显示开屏，第 11 次起不再出现（计数存本地，不联网） */
+/* 访问彩蛋：全站累计（不同设备/地区合并计数）前 10 次访问显示开屏；满额后对所有人生效。
+   计数依赖免费计数器：主 abacus、备 不蒜子（带数值合理性检查）；均不可达或数值异常时直接放行（不挡访问）。 */
 (function () {
   var el = document.getElementById('egg');
   if (!el) return;
-  var KEY = 'szsVisits', n = 0, persist = true;
-  try { n = parseInt(localStorage.getItem(KEY) || '0', 10) || 0; }
-  catch (e) { persist = false; }
-  n = n + 1;
-  if (persist) { try { localStorage.setItem(KEY, String(n)); } catch (e) { } }
-  if (n <= 10) {
+  var LIMIT = 10;
+  var UNLOCKED = 'szsUnlocked';
+  try { if (localStorage.getItem(UNLOCKED) === '1') { el.parentNode.removeChild(el); return; } } catch (e) { }
+  var NS = 'wechat-dossier-3k9f';
+  function pass() { el.parentNode.removeChild(el); }
+  function show(n) {
     document.getElementById('egg-n').textContent = n;
     el.hidden = false;
     document.body.classList.add('egg-open');
@@ -2927,9 +2929,39 @@ body.egg-open{overflow:hidden}
       el.hidden = true;
       document.body.classList.remove('egg-open');
     });
-  } else {
-    el.parentNode.removeChild(el);
   }
+  function done(n) {
+    if (n > 0 && n <= LIMIT) { show(n); return; }
+    if (n > LIMIT) { try { localStorage.setItem(UNLOCKED, '1'); } catch (e) { } }
+    pass();
+  }
+  function tryAbacus() {
+    var ctl = new AbortController();
+    var t = setTimeout(function () { ctl.abort(); }, 4000);
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/visits?ts=' + Date.now(),
+          { signal: ctl.signal, cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) { clearTimeout(t); var n = parseInt(d && d.value, 10); if (!(n > 0)) throw 0; done(n); })
+      .catch(function () { clearTimeout(t); tryBsz(); });
+  }
+  function tryBsz() {                                          /* 备用：不蒜子（按页面 URL 计全站 PV） */
+    var s = document.createElement('script');
+    var fin = false;
+    var to = setTimeout(function () { fin = true; if (s.parentNode) s.parentNode.removeChild(s); pass(); }, 5000);
+    window.eggBsz = function (d) {
+      if (fin) return;
+      fin = true; clearTimeout(to);
+      try { delete window.eggBsz; } catch (e) { window.eggBsz = undefined; }
+      if (s.parentNode) s.parentNode.removeChild(s);
+      var n = parseInt(d && d.page_pv, 10);
+      /* 合理性检查：只接受 1..1000；localhost 等私有 referer 命中聚合桶（百万级）时放弃彩蛋直接放行 */
+      if (n > 0 && n <= 1000) { done(n); } else { pass(); }
+    };
+    s.onerror = function () { if (fin) return; fin = true; clearTimeout(to); pass(); };
+    s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=eggBsz&ts=' + Date.now();
+    document.head.appendChild(s);
+  }
+  tryAbacus();
 })();
 
 </script>
