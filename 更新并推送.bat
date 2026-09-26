@@ -2,7 +2,7 @@
 chcp 65001 >nul
 cd /d "%~dp0"
 echo [1/3] Rebuild page (desensitized) ...
-python "..\_工具\生成网页.py" --脱敏 --部署版 --输出 "%~dp0site\index.html"
+python "..\_工具\生成网页.py" --脱敏 --部署版 --彩蛋 --输出 "%~dp0site\index.html"
 if errorlevel 1 (
   echo.
   echo Rebuild FAILED. Check: this folder must stay inside the workspace, Python installed.

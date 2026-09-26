@@ -161,9 +161,37 @@ main{margin-left:300px}
   a{color:#1f2328;text-decoration:none}
 }
 
+/* ---- 访问彩蛋（前 10 次访问开屏）---- */
+.egg{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+     background:radial-gradient(1000px 560px at 50% 34%,#253145,#10151d 72%)}
+.egg[hidden]{display:none}
+.egg-inner{text-align:center;padding:0 22px}
+.egg-big{font-size:clamp(44px,8.5vw,104px);font-weight:900;letter-spacing:.06em;color:#ffd76a;
+     text-shadow:0 2px 0 #7a4a00,0 10px 34px rgba(255,180,60,.35);animation:eggfloat 3s ease-in-out infinite}
+@keyframes eggfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.egg-sub{margin-top:24px;color:#cbd5e1;font-size:15px;letter-spacing:.12em}
+.egg-sub b{color:#ff8a7a}
+.egg-go{margin-top:28px;padding:12px 34px;border-radius:999px;border:none;cursor:pointer;color:#fff;
+     font:700 16px "Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#e2574b,#b3261e);
+     box-shadow:0 8px 26px rgba(226,87,75,.35)}
+.egg-go:hover{filter:brightness(1.12)}
+.egg-tip{margin-top:16px;color:#7f8c9c;font-size:12px}
+body.egg-open{overflow:hidden}
+@media print{.egg{display:none!important}}
+
 </style>
 </head>
 <body>
+
+<div id="egg" class="egg" hidden>
+  <div class="egg-inner">
+    <div class="egg-big">宋叔叔大帅比</div>
+    <div class="egg-sub">—— 第 <b id="egg-n">1</b> / 10 次访问 ——</div>
+    <button id="egg-go" type="button">进入证据汇编 →</button>
+    <div class="egg-tip">本开屏仅在单个浏览器前 10 次访问时出现，之后自动进入正题</div>
+  </div>
+</div>
+
 <aside class="sb" id="sb">
   <div class="sb-h">违规事项整理<span>证据汇编 · 10 类 42 项</span></div>
   <nav id="sbnav"><div class="grp"><div class="grp-t"><i>01</i>职称与学术造假<b>5</b></div><a class="lk" href="#i0101" title="本人在同事面前自认职称论文「是买的」"><span class="lno">01</span>自认论文系购买、评审前临时凑材料</a><a class="lk" href="#i0102" title="付费购买《中学生英语》论文：中介报价、代写稿件、虚假录用通知、本人确认付款"><span class="lno">02</span>付费购买《中学生英语》论文全过程（报价-成稿-录用-付款）</a><a class="lk" href="#i0103" title="为配偶代文华购买物理学科职称论文并支付费用"><span class="lno">03</span>为配偶代文华购买职称论文</a><a class="lk" href="#i0104" title="买卖课题：从立项到结题全包、挂名主持人明码标价"><span class="lno">04</span>买卖课题（立项-中期-结题全包、挂名主持人）</a><a class="lk" href="#i0105" title="把论文买卖渠道转介给同事、组织同事共同购买，并把购买的论文写入个人履历"><span class="lno">05</span>向同事转介中介、组织共同购买、把论文写进个人履历</a></div>
@@ -2879,6 +2907,28 @@ main{margin-left:300px}
       });
     }, { rootMargin: '-12% 0px -78% 0px' });
     cards.forEach(function (c) { obs.observe(c); });
+  }
+})();
+
+/* 访问彩蛋：单个浏览器前 10 次访问显示开屏，第 11 次起不再出现（计数存本地，不联网） */
+(function () {
+  var el = document.getElementById('egg');
+  if (!el) return;
+  var KEY = 'szsVisits', n = 0, persist = true;
+  try { n = parseInt(localStorage.getItem(KEY) || '0', 10) || 0; }
+  catch (e) { persist = false; }
+  n = n + 1;
+  if (persist) { try { localStorage.setItem(KEY, String(n)); } catch (e) { } }
+  if (n <= 10) {
+    document.getElementById('egg-n').textContent = n;
+    el.hidden = false;
+    document.body.classList.add('egg-open');
+    document.getElementById('egg-go').addEventListener('click', function () {
+      el.hidden = true;
+      document.body.classList.remove('egg-open');
+    });
+  } else {
+    el.parentNode.removeChild(el);
   }
 })();
 
