@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex">
-<meta name="referrer" content="no-referrer-when-downgrade">
 <title>微信聊天记录 · 违规事项整理（证据汇编）</title>
 <style>
 /* 《违规证据汇编》样式 —— 单文件网页，全部内联，无外部依赖 */
@@ -162,36 +161,9 @@ main{margin-left:300px}
   a{color:#1f2328;text-decoration:none}
 }
 
-/* ---- 访问彩蛋（前 10 次访问开屏）---- */
-.egg{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
-     background:radial-gradient(1000px 560px at 50% 34%,#253145,#10151d 72%)}
-.egg[hidden]{display:none}
-.egg-inner{text-align:center;padding:0 22px}
-.egg-big{font-size:clamp(44px,8.5vw,104px);font-weight:900;letter-spacing:.06em;color:#ffd76a;
-     text-shadow:0 2px 0 #7a4a00,0 10px 34px rgba(255,180,60,.35);animation:eggfloat 3s ease-in-out infinite}
-@keyframes eggfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-.egg-sub{margin-top:24px;color:#cbd5e1;font-size:15px;letter-spacing:.12em}
-.egg-sub b{color:#ff8a7a}
-.egg-go{margin-top:28px;padding:12px 34px;border-radius:999px;border:none;cursor:pointer;color:#fff;
-     font:700 16px "Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#e2574b,#b3261e);
-     box-shadow:0 8px 26px rgba(226,87,75,.35)}
-.egg-go:hover{filter:brightness(1.12)}
-.egg-tip{margin-top:16px;color:#7f8c9c;font-size:12px}
-body.egg-open{overflow:hidden}
-@media print{.egg{display:none!important}}
-
 </style>
 </head>
 <body>
-
-<div id="egg" class="egg" hidden>
-  <div class="egg-inner">
-    <div class="egg-big">宋叔叔大帅比</div>
-    <div class="egg-sub">—— 全站累计第 <b id="egg-n">1</b> / 10 次访问 ——</div>
-    <button id="egg-go" class="egg-go" type="button">进入证据汇编 →</button>
-    <div class="egg-tip">各地访问共同累计；全站满 10 次后本开屏自动结束</div>
-  </div>
-</div>
 
 <aside class="sb" id="sb">
   <div class="sb-h">违规事项整理<span>证据汇编 · 10 类 42 项</span></div>
@@ -2909,59 +2881,6 @@ body.egg-open{overflow:hidden}
     }, { rootMargin: '-12% 0px -78% 0px' });
     cards.forEach(function (c) { obs.observe(c); });
   }
-})();
-
-/* 访问彩蛋：全站累计（不同设备/地区合并计数）前 10 次访问显示开屏；满额后对所有人生效。
-   计数依赖免费计数器：主 abacus、备 不蒜子（带数值合理性检查）；均不可达或数值异常时直接放行（不挡访问）。 */
-(function () {
-  var el = document.getElementById('egg');
-  if (!el) return;
-  var LIMIT = 10;
-  var UNLOCKED = 'szsUnlocked';
-  try { if (localStorage.getItem(UNLOCKED) === '1') { el.parentNode.removeChild(el); return; } } catch (e) { }
-  var NS = 'wechat-dossier-3k9f';
-  function pass() { el.parentNode.removeChild(el); }
-  function show(n) {
-    document.getElementById('egg-n').textContent = n;
-    el.hidden = false;
-    document.body.classList.add('egg-open');
-    document.getElementById('egg-go').addEventListener('click', function () {
-      el.hidden = true;
-      document.body.classList.remove('egg-open');
-    });
-  }
-  function done(n) {
-    if (n > 0 && n <= LIMIT) { show(n); return; }
-    if (n > LIMIT) { try { localStorage.setItem(UNLOCKED, '1'); } catch (e) { } }
-    pass();
-  }
-  function tryAbacus() {
-    var ctl = new AbortController();
-    var t = setTimeout(function () { ctl.abort(); }, 4000);
-    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/visits?ts=' + Date.now(),
-          { signal: ctl.signal, cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(function (d) { clearTimeout(t); var n = parseInt(d && d.value, 10); if (!(n > 0)) throw 0; done(n); })
-      .catch(function () { clearTimeout(t); tryBsz(); });
-  }
-  function tryBsz() {                                          /* 备用：不蒜子（按页面 URL 计全站 PV） */
-    var s = document.createElement('script');
-    var fin = false;
-    var to = setTimeout(function () { fin = true; if (s.parentNode) s.parentNode.removeChild(s); pass(); }, 5000);
-    window.eggBsz = function (d) {
-      if (fin) return;
-      fin = true; clearTimeout(to);
-      try { delete window.eggBsz; } catch (e) { window.eggBsz = undefined; }
-      if (s.parentNode) s.parentNode.removeChild(s);
-      var n = parseInt(d && d.page_pv, 10);
-      /* 合理性检查：只接受 1..1000；localhost 等私有 referer 命中聚合桶（百万级）时放弃彩蛋直接放行 */
-      if (n > 0 && n <= 1000) { done(n); } else { pass(); }
-    };
-    s.onerror = function () { if (fin) return; fin = true; clearTimeout(to); pass(); };
-    s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=eggBsz&ts=' + Date.now();
-    document.head.appendChild(s);
-  }
-  tryAbacus();
 })();
 
 </script>
