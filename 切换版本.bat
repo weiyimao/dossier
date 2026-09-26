@@ -4,7 +4,7 @@ cd /d "%~dp0"
 echo Pick the version to publish:
 echo.
 echo   1 = Egg version   (splash + content)
-echo   2 = Title page    (the six characters only)
+echo   2 = Title page    (splash text only)
 echo   3 = Content only  (no splash, no counter)
 echo.
 set /p V=Type 1, 2 or 3 and press Enter: 
