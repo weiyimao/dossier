@@ -16,7 +16,7 @@ if errorlevel 1 echo (no new changes)
 echo [3/3] Push to GitHub ...
 git remote get-url origin >nul 2>nul
 if errorlevel 1 (
-  echo No remote configured yet. See README - "首次上传" step 1-2.
+  echo No remote configured yet. Please run 首次上传.bat first ^(double-click it^).
 ) else (
   git push
   if errorlevel 1 echo Push failed - check GitHub login / remote url.
