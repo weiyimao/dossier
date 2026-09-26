@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer-when-downgrade">
 <title>微信聊天记录 · 违规事项整理（证据汇编）</title>
 <style>
 /* 《违规证据汇编》样式 —— 单文件网页，全部内联，无外部依赖 */
@@ -137,12 +138,63 @@ main{margin-left:300px}
 .top.show{display:block}
 .top:hover{opacity:1}
 
-/* ---------- 窄屏 ---------- */
+/* ---------- 小屏 / 手机端 ---------- */
+#sbBtn{display:none}
+#sbMask{display:none;position:fixed;inset:0;background:rgba(10,14,20,.5);z-index:49}
 @media (max-width:1100px){
-  .sb{display:none}
+  .sb{display:block;width:min(320px,86vw);transform:translateX(-102%);transition:transform .22s ease;
+      box-shadow:6px 0 24px rgba(0,0,0,.35)}
+  .sb.open{transform:none}
+  #sbMask.show{display:block}
   main{margin-left:0}
   .cv-meta{grid-template-columns:1fr}
-  #q{width:100%;flex:1}
+  #sbBtn{display:inline-flex;align-items:center;gap:6px;flex:none;padding:8px 12px;font-size:14px}
+  .tools{flex-wrap:wrap}
+  #q{flex:1 1 160px;width:auto;min-width:0}
+  .tools .sp{display:none}
+  #ex{margin-left:auto}
+  #ex,#co,#pr{font-size:12.5px;padding:6px 10px}
+  .item{scroll-margin-top:98px}
+}
+@media (max-width:720px){
+  .wrap{padding:0 12px 50px}
+  .tools{padding:8px 12px;gap:8px}
+  #qs{font-size:11.5px;min-width:0;white-space:nowrap}
+  .cover{padding:22px 18px 20px}
+  .cover h1{font-size:23px;letter-spacing:1px}
+  .cv-sub{font-size:12.5px;margin-bottom:14px}
+  .cv-meta{font-size:12.5px;gap:5px 14px}
+  .cv-warn{font-size:12px}
+  .cv-stat{font-size:12px}
+  .cv-range{margin-left:0;width:100%}
+  .cat h2{font-size:17px;gap:9px}
+  .cat h2 small{display:none}
+  .hd{padding:11px 12px;gap:8px;flex-wrap:wrap}
+  .hd h3{font-size:15px}
+  .no{font-size:12px;padding:4px 7px}
+  .badge{font-size:11px;padding:2px 7px}
+  .bd{padding:0 12px 12px}
+  .meta{grid-template-columns:1fr;gap:1px;font-size:13px;padding:9px 0 8px}
+  .sec h4{font-size:14.5px;margin:15px 0 7px}
+  .sec h4 .sub{display:block;margin:2px 0 0 0}
+  .raw{font-size:14px}
+  .msg{display:block;padding:5px 9px;margin:3px 0}
+  .msg .t{display:block;font-size:10.5px;margin-bottom:1px}
+  .msg .c{font-size:14px}
+  .cont{padding:1px 10px;font-size:13.5px}
+  .src{margin:10px 0 6px;font-size:11.5px;padding:5px 10px;word-break:break-all}
+  .privacy{font-size:12px;padding:6px 10px}
+  .notice,.overview{padding:2px 14px 14px}
+  .notice pre{font-size:12px}
+  .overview{overflow-x:auto}
+  .overview table{min-width:560px}
+  .overview th,.overview td{padding:6px 8px;font-size:12.5px}
+  .egg-big{font-size:clamp(34px,12vw,60px)}
+  .egg-sub{font-size:13px}
+  .egg-go{padding:11px 26px;font-size:15px}
+  .egg-tip{font-size:11px;padding:0 14px}
+  .top{right:14px;bottom:18px}
+  .ft{font-size:11.5px;margin-top:26px}
 }
 
 /* ---------- 打印 ---------- */
@@ -161,9 +213,36 @@ main{margin-left:300px}
   a{color:#1f2328;text-decoration:none}
 }
 
+/* ---- 访问彩蛋（前 10 次访问开屏）---- */
+.egg{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+     background:radial-gradient(1000px 560px at 50% 34%,#253145,#10151d 72%)}
+.egg[hidden]{display:none}
+.egg-inner{text-align:center;padding:0 22px}
+.egg-big{font-size:clamp(44px,8.5vw,104px);font-weight:900;letter-spacing:.06em;color:#ffd76a;
+     text-shadow:0 2px 0 #7a4a00,0 10px 34px rgba(255,180,60,.35);animation:eggfloat 3s ease-in-out infinite}
+@keyframes eggfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.egg-sub{margin-top:24px;color:#cbd5e1;font-size:15px;letter-spacing:.12em}
+.egg-sub b{color:#ff8a7a}
+.egg-go{margin-top:28px;padding:12px 34px;border-radius:999px;border:none;cursor:pointer;color:#fff;
+     font:700 16px "Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#e2574b,#b3261e);
+     box-shadow:0 8px 26px rgba(226,87,75,.35)}
+.egg-go:hover{filter:brightness(1.12)}
+.egg-tip{margin-top:16px;color:#7f8c9c;font-size:12px}
+body.egg-open{overflow:hidden}
+@media print{.egg{display:none!important}}
+
 </style>
 </head>
 <body>
+
+<div id="egg" class="egg" hidden>
+  <div class="egg-inner">
+    <div class="egg-big">宋叔叔大帅比</div>
+    <div class="egg-sub">—— 全站累计第 <b id="egg-n">1</b> / 10 次访问 ——</div>
+    <button id="egg-go" class="egg-go" type="button">进入证据汇编 →</button>
+    <div class="egg-tip">各地访问共同累计；全站满 10 次后本开屏自动结束</div>
+  </div>
+</div>
 
 <aside class="sb" id="sb">
   <div class="sb-h">违规事项整理<span>证据汇编 · 10 类 42 项</span></div>
@@ -178,8 +257,10 @@ main{margin-left:300px}
 <div class="grp"><div class="grp-t"><i>09</i>分班与亲属请托<b>3</b></div><a class="lk" href="#i0901" title="为亲属子女操作分班，本人自陈「一中分班，惊动全县」"><span class="lno">01</span>为亲属子女操作分班（妹妹女儿11班冯雪、外甥24班）</a><a class="lk" href="#i0902" title="本人亲属网络与其职务的交叠（妹妹孙连芹、妹夫谢玉国）"><span class="lno">02</span>亲属网络：妹妹孙连芹、妹夫谢玉国（厚德集团谢沁呈）</a><a class="lk" href="#i0903" title="利用职务关系为他人请托办事：学生课题、教师调动、面试与事业编辅导"><span class="lno">03</span>利用职权为他人请托办事（学生课题、教师调动、面试辅导、事业编）</a></div>
 <div class="grp"><div class="grp-t"><i>10</i>其他违规与辅证<b>4</b></div><a class="lk" href="#i1001" title="替同事隐瞒事项，并向询问者谎报其去向（涉疫情防控）"><span class="lno">01</span>替同事隐瞒情况、谎报核酸事由</a><a class="lk" href="#i1002" title="涉本人年级的家长投诉（体罚）工单，由本人出具回复件"><span class="lno">02</span>家长投诉体罚的12345工单由本人负责回复</a><a class="lk" href="#i1003" title="本人在考勤与签字环节的安排：允许找人代签，强调「关键是签字」"><span class="lno">03</span>签字代签、考勤形式化</a><a class="lk" href="#i1004" title="购车过程中商家给予的额外好处（弱线索）"><span class="lno">04</span>购车与商家好处（弱线索，仅作辅证）</a></div></nav>
 </aside>
+<div id="sbMask"></div>
 <main>
   <div class="tools">
+    <button id="sbBtn" type="button">☰ 目录</button>
     <input id="q" type="search" placeholder="搜索：事项 / 人名 / 关键词 / 金额 …">
     <span id="qs">42 项</span>
     <span class="sp"></span>
@@ -2859,6 +2940,22 @@ main{margin-left:300px}
     });
   });
 
+  /* 手机端：侧栏抽屉开关 */
+  var sbBtn = document.getElementById('sbBtn');
+  var sbEl = document.getElementById('sb');
+  var sbMask = document.getElementById('sbMask');
+  if (sbBtn && sbEl && sbMask) {
+    var closeSb = function () { sbEl.classList.remove('open'); sbMask.classList.remove('show'); };
+    sbBtn.addEventListener('click', function () {
+      sbEl.classList.toggle('open');
+      sbMask.classList.toggle('show');
+    });
+    sbMask.addEventListener('click', closeSb);
+    sbEl.addEventListener('click', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a.lk')) closeSb();
+    });
+  }
+
   var top = document.getElementById('top');
   top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
   window.addEventListener('scroll', function () {
@@ -2881,6 +2978,59 @@ main{margin-left:300px}
     }, { rootMargin: '-12% 0px -78% 0px' });
     cards.forEach(function (c) { obs.observe(c); });
   }
+})();
+
+/* 访问彩蛋：全站累计（不同设备/地区合并计数）前 10 次访问显示开屏；满额后对所有人生效。
+   计数依赖免费计数器：主 abacus、备 不蒜子（带数值合理性检查）；均不可达或数值异常时直接放行（不挡访问）。 */
+(function () {
+  var el = document.getElementById('egg');
+  if (!el) return;
+  var LIMIT = 10;
+  var UNLOCKED = 'szsUnlocked';
+  try { if (localStorage.getItem(UNLOCKED) === '1') { el.parentNode.removeChild(el); return; } } catch (e) { }
+  var NS = 'wechat-dossier-3k9f';
+  function pass() { el.parentNode.removeChild(el); }
+  function show(n) {
+    document.getElementById('egg-n').textContent = n;
+    el.hidden = false;
+    document.body.classList.add('egg-open');
+    document.getElementById('egg-go').addEventListener('click', function () {
+      el.hidden = true;
+      document.body.classList.remove('egg-open');
+    });
+  }
+  function done(n) {
+    if (n > 0 && n <= LIMIT) { show(n); return; }
+    if (n > LIMIT) { try { localStorage.setItem(UNLOCKED, '1'); } catch (e) { } }
+    pass();
+  }
+  function tryAbacus() {
+    var ctl = new AbortController();
+    var t = setTimeout(function () { ctl.abort(); }, 4000);
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/visits?ts=' + Date.now(),
+          { signal: ctl.signal, cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) { clearTimeout(t); var n = parseInt(d && d.value, 10); if (!(n > 0)) throw 0; done(n); })
+      .catch(function () { clearTimeout(t); tryBsz(); });
+  }
+  function tryBsz() {                                          /* 备用：不蒜子（按页面 URL 计全站 PV） */
+    var s = document.createElement('script');
+    var fin = false;
+    var to = setTimeout(function () { fin = true; if (s.parentNode) s.parentNode.removeChild(s); pass(); }, 5000);
+    window.eggBsz = function (d) {
+      if (fin) return;
+      fin = true; clearTimeout(to);
+      try { delete window.eggBsz; } catch (e) { window.eggBsz = undefined; }
+      if (s.parentNode) s.parentNode.removeChild(s);
+      var n = parseInt(d && d.page_pv, 10);
+      /* 合理性检查：只接受 1..1000；localhost 等私有 referer 命中聚合桶（百万级）时放弃彩蛋直接放行 */
+      if (n > 0 && n <= 1000) { done(n); } else { pass(); }
+    };
+    s.onerror = function () { if (fin) return; fin = true; clearTimeout(to); pass(); };
+    s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=eggBsz&ts=' + Date.now();
+    document.head.appendChild(s);
+  }
+  tryAbacus();
 })();
 
 </script>
