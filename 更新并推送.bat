@@ -1,8 +1,10 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
-echo [1/3] Rebuild page (desensitized) ...
-python "..\_工具\生成网页.py" --脱敏 --部署版 --彩蛋 --输出 "%~dp0site\index.html"
+rem ===== GitHub page is only a redirect entry now; change JUMP to change the target =====
+set "JUMP=https://ysyz.dpdns.org/"
+echo [1/3] Rebuild page (redirect to %JUMP%) ...
+python "..\_工具\生成网页.py" --跳转 "%JUMP%" --输出 "%~dp0site\index.html"
 if errorlevel 1 (
   echo.
   echo Rebuild FAILED. Check: this folder must stay inside the workspace, Python installed.
